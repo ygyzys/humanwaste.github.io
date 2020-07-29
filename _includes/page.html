@@ -1,3 +1,354 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script> <!-- for chessboard.js -->
+<script src="../chessboard.js"></script>
+<script src="../chessboardjs-themes.js"></script>
+<script src="../leader-line/leader-line.min.js"></script> <!-- for drawing arrows -->
+
 <h1>{{ page.title }} {% if page.tagline %} <h4><span style="color:black">{{ page.tagline }}</span></h4>{% endif %}</h1>
 
+<button class="themebtn" type="button" id="newspaper"><img src="images/chesspieces/newspaper/bK.png" /></button>
+<button class="themebtn" type="button" id="merida"><img src="images/chesspieces/merida/bK.svg" /></button>
+<button class="themebtn" type="button" id="jinalpha"><img src="images/chesspieces/jinalpha/bK.svg" /></button>
+<button class="themebtn" type="button" id="maya"><img src="images/chesspieces/maya/bK.svg" /></button>
+<button class="themebtn" type="button" id="pirat"><img src="images/chesspieces/pirat/bK.svg" /></button>
+<button class="themebtn" type="button" id="ericson"><img src="images/chesspieces/ericson/bK.png" /></button>
+<button class="themebtn" type="button" id="pepecorona"><img src="images/chesspieces/pepecorona/bK.png" /></button>
+<button class="themebtn" type="button" id="vvvvvvchess"><img src="images/chesspieces/vvvvvvchess/bK.png" /></button>
+
 {{ content }}
+
+<script>
+  function findfen(boardnum, cursor) {
+    // return the current fen position (specified by cursor) in the specified board (specified by boardnum)
+    let fens = fenlist[boardnum]
+    let cursorsplit = cursor.split("-") // ["3","2"]
+    let target = fens[cursorsplit[0]] // fens[3]
+    let i = 1
+    while (target && target[1] && i < cursorsplit.length) {
+      target = target[1][cursorsplit[i]]
+      i++
+    }
+    return (target && i == cursorsplit.length) ? target[0] : false
+  }
+
+  // move the cursor back one move on the given board
+  function cursorback(boardnum) {
+    const cursor = cursors[boardnum] // something like "0-10-23"
+    let cursorsplit = cursor.split("-") // ["0", "10", "23"]
+    let i = cursorsplit.length-1
+    if (parseInt(cursorsplit[i]) == 0) {
+      if (i > 0) {
+        let newcursor = cursorsplit.splice(0,i).join("-") 
+        cursors[boardnum] = newcursor
+        return cursorback(boardnum)
+      }
+    }
+    else {
+      cursorsplit[i] = String(parseInt(cursorsplit[i])-1)
+      let newcursor = cursorsplit.join("-")
+      cursors[boardnum] = newcursor
+      return newcursor
+    }
+    return false
+  }
+
+  // move the cursor forward on move on the given board
+  function cursorforward(boardnum) {
+    const cursor = cursors[boardnum]
+    let cursorsplit = cursor.split("-")
+    let i = cursorsplit.length-1
+    cursorsplit[i] = String(parseInt(cursorsplit[i])+1)
+    let newcursor = cursorsplit.join("-")
+    if (findfen(boardnum, newcursor)) {
+      cursors[boardnum] = newcursor
+      return newcursor
+    }
+    else {
+      return false
+    }
+  }
+
+  // update the given board to the given position
+  function setposition(board, fen, animation) {
+    board.position(fen, animation)
+  };
+
+  window.onload = function() {
+    // add event listener to window resize that will resize all boards
+    window.addEventListener("resize", (evt) => {
+      boards.forEach((board) => {
+        board.resize()
+      })
+      // we must redraw arrows
+      deleteArrows(0);
+      drawArrow(0, "a8-c8", "14-0");
+      drawArrowPlain(0, "a7-a6", "14");
+    }, false)
+
+    function changeTheme(theme) {
+      boards.forEach((board, boardnum) => {
+        let currentFen = findfen(boardnum, cursors[boardnum])
+        deleteArrows(boardnum)
+        boards[boardnum].destroy()
+        let newBoard = ChessBoard(`board${boardnum}`, {
+          pieceTheme: window["pieceThemes"][theme],
+          boardTheme: window["boardThemes"][theme],
+          position: currentFen,
+          moveSpeed: 38,
+          draggable: false,
+          showNotation: false,
+        })
+        // we must redraw arrows
+        deleteArrows(0);
+        drawArrow(0, "a8-c8", "14-0");
+        drawArrowPlain(0, "a7-a6", "14");
+        boards[boardnum] = newBoard
+      })
+    }
+
+    // set the given board, update the cursor variable and update the page to highlight the selected move and the variation
+    function playmove(boardnum, cursor, animation) {
+      if (!cursor) cursor = cursors[boardnum]
+      if (!animation) animation = true
+      const fen = findfen(boardnum, cursor) // find the fen given by cursor
+      setposition(boards[boardnum], fen, animation); // update the position
+      const moveselected = document.getElementsByClassName(`game${boardnum} moveOn`)
+      for(let i = moveselected.length-1; i >= 0; i--) { // de-highlight previously selected moves (there should only be one move)
+        moveselected[i].className = `game${boardnum} move`
+      }
+      // highlight a new move
+      document.getElementById(`board${boardnum}move${cursor}`).className = `game${boardnum} moveOn`
+
+      // de-highlight previously highlighted variation
+      const old = document.getElementsByClassName(`game${boardnum} oogabooga`)
+      for (let i = old.length-1; i >= 0; i--) {
+        old[i].className = old[i].className.split("oogabooga")[0]
+      }
+      // add new variation highlight
+      const cursorsplit = cursor.split("-")
+      const variationselected = document.getElementById(`board${boardnum}variation${cursorsplit.splice(0,cursorsplit.length-1).join("-")}`)
+      if (variationselected) {
+        variationselected.className += " oogabooga"
+      }
+
+      // delete previously drawn arrows whenever a move is played
+      deleteArrows(boardnum);
+
+      // annotate the board with any immediately upcoming variations (add new arrows if necessary)
+      if (boardnum == 0) {
+        switch (cursor) {
+          case "13": drawArrow(0, "a8-c8", "14-0"); drawArrowPlain(0, "a7-a6", "14"); break; // on move 13 of the mainline there is an alternative 14th move
+          case "14-1": drawArrow(0, "a7-a5", "14-2-0"); drawArrowPlain(0, "e7-e5", "14-2"); break; // on move 1 of the variation in the 14th move of the main line, there is an alternative 2nd move
+          case "25": drawArrow(0, "g8-h6", "26-0"); drawArrowPlain(0, "g7-g6", "26"); break;
+          default: 
+        }
+      }
+    }
+
+    // set up each board
+    boards.forEach((board, i) => playmove(i, cursors[i], false));
+
+    // listen to click events on each board container
+    boarddivs = document.getElementsByClassName("gamecontainer")
+    for (let i = 0, len = boarddivs.length; i < len; i++) {
+      boarddivs[i].addEventListener("click", function(evt) {
+        evt.stopPropagation() // ?
+        selected = document.getElementsByClassName("selected");
+        if (selected[0]) {
+          selected[0].className = "gamecontainer";
+        }
+        boarddivs[i].className = "gamecontainer selected";
+      });
+    }
+
+    function backfunc(gamenum) {
+      // if gamenum not provided, go back a move in currently selected (last clicked) game
+      if (!gamenum) {
+        let gamesselected = document.getElementsByClassName("selected") // there should only be one
+        if (gamesselected[0]) {
+          let i = 0
+          let gamenum = null
+          let gameChildren = gamesselected[0].children
+          while (i < gameChildren.length && !gamenum) {
+            // looking for the element with id "gameN" where N is an integer
+            if (gameChildren[i].id.slice(0, 4) == "game") {
+              gamenum = gameChildren[i].id.split("game")[1] // "game2".split("game")[1] == "2"
+            }
+            i++
+          }
+          if (gamenum) {
+            cursorback(gamenum)
+            playmove(gamenum)
+          }
+        }
+      }
+      else {
+        cursorback(gamenum)
+        playmove(gamenum)
+      }
+    }
+
+    function forwardfunc(gamenum) {
+      if (!gamenum) {
+        let gamesselected = document.getElementsByClassName("selected")
+          if (gamesselected[0]) {
+            let i = 0
+            let gamenum = null
+            let gameChildren = gamesselected[0].children
+            while (i < gameChildren.length && !gamenum) {
+              // looking for the element with id "gameN" where N is an integer
+              if (gameChildren[i].id.slice(0, 4) == "game") {
+                gamenum = gameChildren[i].id.split("game")[1] // "game2".split("game")[1] == "2"
+              }
+              i++
+            }
+            if (gamenum) {
+              cursorforward(gamenum)
+              playmove(gamenum)
+            }
+          }
+      }
+      else {
+        cursorforward(gamenum)
+        playmove(gamenum)
+      }
+    }
+
+    // listen to left & right arrow keys
+    document.addEventListener("keydown", function(evt) {
+      if (evt.keyCode == 37) { // left arrow key
+        evt.preventDefault()
+        backfunc()
+      }
+      else if (evt.keyCode == 39) { // right arrow key
+        evt.preventDefault()
+        forwardfunc()
+      }
+    });
+
+    // add anchors to each move
+    const movespans = [ document.getElementsByClassName("move"),
+                        document.getElementsByClassName("moveOn") ]
+    for (let j = 0; j < 2; j++) {
+      for (let i = movespans[j].length-1; i >= 0; i--) {
+        const r = movespans[j][i].id.split("move") // ['board10', '3-3']
+        let boardnum = r[0].split("board")[1] // '10'
+        let movenum = r[1] // '3-3'
+        let anchor = document.createElement("a")
+        anchor.href = "#"
+        anchor.appendChild(document.createTextNode(movespans[j][i].innerHTML))
+        anchor.addEventListener("click", (evt) => {
+          evt.preventDefault()
+          cursors[boardnum] = movenum // set the cursor before playing move
+          playmove(boardnum)
+        })
+        anchor.innerHTML = movespans[j][i].innerHTML
+        movespans[j][i].innerHTML = ""
+        movespans[j][i].appendChild(anchor)
+      }
+    }
+
+    // add listeners to back and forward buttons
+    const backbuttons = document.getElementsByClassName("back")
+    for (let i = backbuttons.length-1; i >= 0; i--) {
+      backbuttons[i].addEventListener("click", (evt) => {
+        evt.preventDefault()
+        let gamenum = backbuttons[i].id.split("back")[1]
+        backfunc(gamenum)
+      })
+    }
+    const forwardbuttons = document.getElementsByClassName("forward")
+    for (let i = forwardbuttons.length-1; i >= 0; i--) {
+      forwardbuttons[i].addEventListener("click", (evt) => {
+        evt.preventDefault()
+        let gamenum = forwardbuttons[i].id.split("forward")[1]
+        forwardfunc(gamenum)
+      })
+    }
+    const backbackbuttons = document.getElementsByClassName("backback")
+    for (let i = backbackbuttons.length-1; i >= 0; i--) {
+      backbackbuttons[i].addEventListener("click", (evt) => {
+          evt.preventDefault()
+          let gamenum = backbackbuttons[i].id.split("backback")[1]
+          backfunc(gamenum)
+          backfunc(gamenum)
+        })
+      }
+      const forwardforwardbuttons = document.getElementsByClassName("forwardforward")
+      for (let i = forwardforwardbuttons.length-1; i >= 0; i--) {
+        forwardforwardbuttons[i].addEventListener("click", (evt) => {
+          evt.preventDefault()
+          let gamenum = forwardforwardbuttons[i].id.split("forwardforward")[1]
+          forwardfunc(gamenum)
+          forwardfunc(gamenum)
+        })
+      }
+
+      function drawArrowPlain(boardnum, move, moveIdx) {
+        drawArrow(boardnum, move, moveIdx, true)
+      }
+
+      function drawArrow(boardnum, move, moveIdx, drawPlain) {
+        // annotates the board with an arrow from square a to square b
+        // move should be of the form {square-a}-{square-b} (e.g. "d2-d4")
+        // we also need the move id (e.g. "3-3") so that the user can play the move by clicking the arrow's text
+        let a, b
+        [a, b] = move.split("-")
+        const leftward = a[0] > b[0] // we should reverse left-pointing arrow so that its text is not upside down
+        // find the two square objects in the DOM
+        let startSq = document.querySelector(`#board${boardnum} [data-square="${a}"]`)
+        let endSq = document.querySelector(`#board${boardnum} [data-square="${b}"]`)
+        // if the squares exist, create a leaderline (arrow) and store it in the leaderlines array (so that we can delete it later)
+        if (startSq !== null && endSq !== null) {
+          startOrEndLabel = leftward ? "startLabel" : "endLabel"
+          let ll = new LeaderLine(
+          LeaderLine.pointAnchor(leftward ? endSq : startSq),
+          LeaderLine.pointAnchor(leftward ? startSq : endSq),
+          {
+            path: 'straight',
+            color: `${drawPlain ? 'rgba(212,36,67,0.5)' : 'rgba(94,198,85,0.5)'}`,
+            size: 5.6*(endSq.offsetWidth)/83, // size of a square is at most 83 - make arrow size proportional
+            startPlug: leftward ? 'arrow1' : 'behind', // reverse startplug and endplug for left arrows
+            endPlug: leftward ? 'behind' : 'arrow1',  // reverse startplug and endplug for leftward arrows
+          })
+          // reverse the placement of the arrow text for leftward arrows
+          ll[startOrEndLabel] = LeaderLine.pathLabel(`${drawPlain ? 'MAIN' : 'VAR.'}`, {
+              // lineOffset: leftward ? 4 : -4, // add offset (from the default location)
+              color: `${drawPlain ? 'rgb(212,36,67)' : 'green'}`, // font color
+              outlineColor: "#fff",
+              fontSize: `${20*(endSq.offsetWidth)/83}px`,
+              fontWeight: "bold",
+            })
+          leaderlines[boardnum].push(ll);
+        }
+        let leaderline = document.querySelector(".leader-line:last-of-type")
+        // console.log(document.querySelector(".leader-line:last-of-type"))
+        if (leaderline) {
+          // leaderline.style.zIndex = 'auto'
+          leaderlineText = leaderline.querySelector("text")
+          // leaderlineText.style.zIndex = 1000
+          leaderlineText.addEventListener("click", function(evt) {
+            // evt.preventDefault() //necessary?
+            // evt.stopPropagation() //necessary?
+            cursors[boardnum] = moveIdx // update the cursor first before playing move
+            playmove(boardnum, moveIdx, true)
+            deleteArrows(boardnum)
+          }, false);
+        }
+      }
+
+      function deleteArrows(boardnum) {
+        leaderlines[boardnum].forEach(ll => ll.remove())
+        leaderlines[boardnum] = []
+      }
+      
+      // add click listener to themebuttons
+      let themebuttons = document.getElementsByClassName("themebtn")
+      for (let i = themebuttons.length-1; i >= 0; i--) {
+        let theme = themebuttons[i].id
+        themebuttons[i].addEventListener("click", (evt) => {
+          evt.preventDefault()
+          changeTheme(theme)
+        })
+      }
+    }
+</script>

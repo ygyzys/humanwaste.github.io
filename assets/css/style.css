@@ -8,6 +8,15 @@
  * Date: $date$
  */
 
+.page-list {
+  display:inline-block;
+  text-align: left;
+}
+
+.page-list a {
+  text-decoration: underline;
+}
+
 .container-narrow {
   margin: 0 auto;
   padding: 0.25rem;
@@ -15,6 +24,7 @@
 }
 
 body {
+  font-family: 'Open Sans', 'Segoe UI', Tahoma, sans-serif;
   text-align: center;
 }
 
