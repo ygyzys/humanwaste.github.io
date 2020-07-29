@@ -1,0 +1,465 @@
+/*!
+ * chessboard.js $version$
+ *
+ * Copyright 2013 Chris Oakman
+ * Released under the MIT license
+ * https://github.com/oakmac/chessboardjs/blob/master/LICENSE
+ *
+ * Date: $date$
+ */
+
+.container-narrow {
+  margin: 0 auto;
+  padding: 0.25rem;
+  /* max-width: 80vw; */
+}
+
+body {
+  text-align: center;
+}
+
+.navbar {
+  background-color: rgb(65, 79, 80);
+  padding: .5em 0.5em;
+  margin: 0 0 0.7em 0;
+  display: flex;
+}
+ 
+.navbar-dark .navbar-nav .nav-link {
+  font-family: 'Open Sans', 'Segoe UI', Tahoma, sans-serif;
+  color:#fdfdfd;
+  font-size: 0.94em;
+}
+
+.navbar-collapse {
+  text-align: center;
+}
+
+/* .navbar-dark .navbar-toggler {
+  background-color: inherit;
+} */
+
+.navbar-brand {
+  font-family: 'Constantia', 'Georgia', 'Liberation Serif', serif;
+  color:#fefeff;
+  letter-spacing: .03em;
+  align-self: flex-start;
+}
+
+#navbar-toggle-cbox {
+  display: none;
+}
+
+#navbar-toggle-cbox:checked ~ .collapse {
+  display: block;
+}
+
+.navbar-toggler {
+  border: none;
+  outline: none;
+}
+
+.navbar-toggler > .navbar-toggler-icon {
+  /* background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E"); */
+  background-image: url("../../images/hamburger.png");
+  width: 1.8em;
+  height: 1.8em;
+}
+
+.themebtn {
+  height: 60px;
+  width: 60px;
+  max-height: 10vw;
+  max-width: 10vw;
+  border: 2px outset #dedfde;
+  background: #b5b2b6;
+}
+
+.themebtn:active {
+  background: #f5f5fa;
+}
+
+.themebtn:focus {
+  outline: 1px dotted black;
+}
+
+.themebtn img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+svg.leader-line {
+  cursor: none;
+}
+
+svg.leader-line > text {
+  pointer-events: auto; /* !important needed? */
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently */
+}
+
+@font-face {
+  font-family: "Figurine";
+  src: url("../../fonts/std.ttf") format("truetype");
+} 
+
+.figurine {
+  font-family: 'Figurine';
+  font-size: 85%;
+}
+
+.noselect {
+  user-select: none;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  padding: 0 4%;
+  display: flex;
+}
+
+.back, .backback, .forward, .forwardforward {
+  /* order: 1; */
+  display: inline-block;
+  position: relative;
+  color:rgb(60, 60, 70);
+  font-size: 19px;
+  padding: 0.8vh 3vw;
+  flex-grow: 1; /* make buttons grow (proportionately) to fill size of container */
+  margin: 0.2em 0.05em 0.6em;
+  border: 0.17em solid #bcbccb;
+  /* box-sizing: border-box; */
+  /* text-decoration:none; */
+  background:rgb(208, 208, 208);
+  text-align:center;
+}
+
+.back:active, .forward:active, .backback:active, .forwardforward:active {
+  background:rgb(236, 236, 234);
+  color: rgb(28, 122, 199);
+}
+
+.back:active {
+  box-shadow: 3px 2px #555;
+  transform: translateX(-3px);
+}
+
+.forward:active {
+  box-shadow: -3px 2px #555;
+  transform: translateX(3px);
+}
+
+.backback:active {
+  box-shadow: 6px 4px #555;
+  transform: translateX(-6px);
+}
+
+.forwardforward:active {
+  box-shadow: -6px 4px #555;
+  transform: translateX(6px);
+}
+/* @media all and (max-width:30em) {
+  .back, .forward, .backback, .forwardforward {
+    display: inline-block;
+    margin:0.1em auto;
+  }
+}  */
+
+/* scroll bar */
+.scroller::-webkit-scrollbar {
+  width: 17px;
+}
+
+.scroller::-webkit-scrollbar-track {
+  background: #e6e5e5;
+}
+
+.scroller::-webkit-scrollbar-thumb {
+  background: #a8a8a8;
+  border-radius: 1px;
+  border: 3px solid #e6e5e5;
+}
+
+.scroller {
+  text-align: left;
+  /* position: relative; */
+  /* scrollbar-width: thin; */
+  scrollbar-color: #a8a8a8 #e6e5e5;
+  height: 650px;
+  max-height: 70vw;
+  background: rgb(252, 252, 251);
+  overflow-y: auto;
+  min-width: 140px;
+  /* max-width: 100%; */
+  flex-basis: 260px;
+  flex-grow: 1;
+  margin: 0 auto 0 0;
+  padding: 1rem;
+  font: 100%/1.4 serif;
+  border: 1px solid rgb(197, 197, 197);
+}
+
+.container {
+  font-family: 'Open Sans', 'Segoe UI', Tahoma, sans-serif;
+  position: absolute;
+  max-width: 100%;
+  padding-bottom: 70px;
+}
+
+.gamecontainer {
+  position: relative;
+  margin: 0.7em 0;
+  outline: 3px solid pink;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+.gamecontainer.selected {
+  background:rgb(241, 245, 247);
+}
+
+.boardcontainer {
+  min-width: 240px;
+  width: 91vw;
+  max-width: 650px;
+  padding: 2px;
+}
+
+.move-list {
+  font-size: 1.22em;
+  font-family: 'Arimo', sans-serif;
+  font-weight: bold;
+}
+
+.move, .moveOn {
+  padding: 0em 0.34em 0em 0.34em;
+  display: inline-block;
+}
+
+.move a, .moveOn a {
+  display: inline-block; 
+  padding: 0em 0.34em 0em 0.34em;
+  margin: 0em -0.34em 0em -0.34em;
+}
+
+.move a {
+  color: #776c6c;
+}
+
+.oogabooga > .move a {
+  color: #000;
+  background: #e6e3e1;
+}
+
+.moveOn a {
+  color: rgb(255, 249, 221);
+}
+
+.moveOn {
+  /* border-radius: 6px 6px 1px 1px; */
+  background: #2963bb;
+}
+
+.move a:hover {
+  text-decoration: none;
+  color: #8b184d;
+}
+
+.moveOn a:hover {
+  text-decoration: none;
+}
+
+.move a:focus {
+  /* outline: 2px dotted blue; */
+  border: 2px dotted blue;
+  text-decoration: none;
+}
+
+.moveOn a:focus {
+  /* outline: 2px dotted blue; */
+  border: 2px dotted blue;
+  text-decoration: none;
+}
+
+.toggler {
+  display: inline;
+}
+
+.toggler + label + .variation {
+  display: none;
+}
+
+.toggler:checked + label + .variation {
+  display: inline;
+}
+
+.toggler {
+  position:absolute;
+  z-index:-1000;
+  left:-1000px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height:1px;
+  width:1px;
+  margin:-1px;
+  padding:0;
+  border:0;
+}
+
+.toggler + label {
+  /* padding-left:32px; */
+  /* height:1em;  */
+  /* display:inline-block; */
+  line-height:1.15em;
+  font-size:0.77em;
+  /* vertical-align:middle; */
+  /* cursor:pointer;
+  background-repeat:no-repeat;
+  background-position: 0 0;
+  background-image:url(checkstyle.png);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; */
+}
+
+.toggler:not(:checked),
+.toggler:checked {
+  position: absolute;
+  left: -9999px;
+}
+.toggler:not(:checked) + label,
+.toggler:checked + label {
+  position: relative;
+  padding-left: 1.35em;
+  cursor: pointer;
+}
+
+/* checkbox aspect */
+.toggler:not(:checked) + label:before,
+.toggler:checked + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.25em; height: 1.25em;
+  border: 2px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+}
+/* checked mark aspect */
+.toggler:not(:checked) + label:after,
+.toggler:checked + label:after {
+  content: '⊕';
+  /* font-weight: bold; */
+  position: absolute;
+  top: .09em; left: .115em;
+  line-height: 0.82;
+  font-size: 1.18em;
+  transition: all .1s;
+  color: #0d9e20;
+}
+/* checked mark aspect changes */
+.toggler:not(:checked) + label:after {
+  opacity: 0;
+  transform: scale(0);
+}
+.toggler:checked + label:after {
+  opacity: 1;
+  transform: scale(1);
+}
+/* disabled checkbox */
+.toggler:disabled:not(:checked) + label:before,
+.toggler:disabled:checked + label:before {
+  box-shadow: none;
+  border-color: #bbb;
+  background: #ddd;
+}
+
+/* accessibility */
+.toggler:focus + label:before {
+  border: 2px dotted blue;
+}
+
+/* hover style just for information */
+label:hover:before {
+  border: 2px solid #4778d9!important;
+}
+
+/* clearfix */
+.clearfix-7da63 {
+  clear: both;
+}
+
+/* .chessboard-63f37 {
+  width: 100%;
+} */
+
+/* board */
+.board-b72b1 {
+  border: 2px solid #404040;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+/* square */
+.square-55d63 {
+  float: left;
+  position: relative;
+
+  /* disable any native browser highlighting */
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+
+/* white square */
+/*
+.white-1e1d7 {
+  background: #f0d9b5;
+  color: #b58863;
+}
+*/
+/* black square */
+/*
+.black-3c85d {
+  background: #b58863;
+  color: #f0d9b5;
+}
+*/
+
+/* highlighted square */
+/*.highlight1-32417, .highlight2-9c5d2 {
+  -webkit-box-shadow: inset 0 0 3px 3px yellow;
+  -moz-box-shadow: inset 0 0 3px 3px yellow;
+  box-shadow: inset 0 0 3px 3px yellow;
+}*/
+
+/* notation */
+/* .notation-322f9 {
+  cursor: default;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  position: absolute;
+}
+.alpha-d2270 {
+  bottom: 1px;
+  right: 3px;
+}
+.numeric-fc462 {
+  top: 2px;
+  left: 2px;
+} */
