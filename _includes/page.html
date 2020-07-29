@@ -5,14 +5,16 @@
 
 <h1>{{ page.title }} {% if page.tagline %} <h4><span style="color:black">{{ page.tagline }}</span></h4>{% endif %}</h1>
 
-<button class="themebtn" type="button" id="newspaper"><img src="images/chesspieces/newspaper/bK.png" /></button>
-<button class="themebtn" type="button" id="merida"><img src="images/chesspieces/merida/bK.svg" /></button>
-<button class="themebtn" type="button" id="jinalpha"><img src="images/chesspieces/jinalpha/bK.svg" /></button>
-<button class="themebtn" type="button" id="maya"><img src="images/chesspieces/maya/bK.svg" /></button>
-<button class="themebtn" type="button" id="pirat"><img src="images/chesspieces/pirat/bK.svg" /></button>
-<button class="themebtn" type="button" id="ericson"><img src="images/chesspieces/ericson/bK.png" /></button>
-<button class="themebtn" type="button" id="pepecorona"><img src="images/chesspieces/pepecorona/bK.png" /></button>
-<button class="themebtn" type="button" id="vvvvvvchess"><img src="images/chesspieces/vvvvvvchess/bK.png" /></button>
+<button class="themebtn" type="button" id="newspaper"><img src="images/chesspieces/newspaper/bK.png" title="Newspaper" alt="Newspaper board theme" /></button>
+<button class="themebtn" type="button" id="merida"><img src="images/chesspieces/merida/bK.svg"  title="Merida" alt="Merida board theme" /></button>
+<button class="themebtn" type="button" id="jinalpha"><img src="images/chesspieces/jinalpha/bK.svg"  title="Jin Alpha" alt="Jin Alpha board theme" /></button>
+<button class="themebtn" type="button" id="maya"><img src="images/chesspieces/maya/bK.svg"  title="Maya" alt="Maya board theme" /></button>
+<button class="themebtn" type="button" id="pirat"><img src="images/chesspieces/pirat/bK.svg"  title="Pirat" alt="Pirat board theme" /></button>
+<button class="themebtn" type="button" id="ericson"><img src="images/chesspieces/ericson/bK.png"  title="Ericson" alt="Ericson board theme" /></button>
+<button class="themebtn" type="button" id="pepecorona"><img src="images/chesspieces/pepecorona/bK.png"  title="Pepe Corona" alt="Pepe Corona board theme" /></button>
+<button class="themebtn" type="button" id="vvvvvvchess"><img src="images/chesspieces/vvvvvvchess/bK.png"  title="VVVVVVChess" alt="VVVVVVChess board theme" /></button>
+<button class="themebtn" type="button" id="bookgoodcompanions"><img src="images/chesspieces/bookgoodcompanions/bK.svg"  title="Book Good Companions" alt="book good companions board theme" /></button>
+<button class="themebtn" type="button" id="bookengraved"><img src="images/chesspieces/bookengraved/bK.svg"  title="Book Engraved" alt="Book Engraved board theme" /></button>
 
 {{ content }}
 
@@ -136,9 +138,9 @@
       // annotate the board with any immediately upcoming variations (add new arrows if necessary)
       if (boardnum == 0) {
         switch (cursor) {
-          case "13": drawArrow(0, "a8-c8", "14-0"); drawArrowPlain(0, "a7-a6", "14"); break; // on move 13 of the mainline there is an alternative 14th move
-          case "14-1": drawArrow(0, "a7-a5", "14-2-0"); drawArrowPlain(0, "e7-e5", "14-2"); break; // on move 1 of the variation in the 14th move of the main line, there is an alternative 2nd move
-          case "25": drawArrow(0, "g8-h6", "26-0"); drawArrowPlain(0, "g7-g6", "26"); break;
+          case "10": drawArrow(0, "a8-c8", "11-0"); drawArrowPlain(0, "a7-a6", "11"); break; // on move 13 of the mainline there is an alternative 14th move
+          case "11-1": drawArrow(0, "a7-a5", "11-2-0"); drawArrowPlain(0, "e7-e5", "11-2"); break; // on move 1 of the variation in the 14th move of the main line, there is an alternative 2nd move
+          case "22": drawArrow(0, "g8-h6", "23-0"); drawArrowPlain(0, "g7-g6", "23"); break;
           default: 
         }
       }
@@ -290,7 +292,7 @@
       function drawArrow(boardnum, move, moveIdx, drawPlain) {
         // annotates the board with an arrow from square a to square b
         // move should be of the form {square-a}-{square-b} (e.g. "d2-d4")
-        // we also need the move id (e.g. "3-3") so that the user can play the move by clicking the arrow's text
+        // we also need the move index (e.g. "3-3") so that the user can play the move by clicking the arrow's text
         let a, b
         [a, b] = move.split("-")
         const leftward = a[0] > b[0] // we should reverse left-pointing arrow so that its text is not upside down

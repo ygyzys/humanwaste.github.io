@@ -372,7 +372,7 @@ svg.leader-line > text {
   content: '⊕';
   /* font-weight: bold; */
   position: absolute;
-  top: .09em; left: .115em;
+  top: .09em; left: .08em;
   line-height: 0.82;
   font-size: 1.18em;
   transition: all .1s;
