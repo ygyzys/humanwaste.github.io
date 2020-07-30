@@ -288,48 +288,50 @@
         // annotates the board with an arrow from square a to square b
         // move should be of the form {square-a}-{square-b} (e.g. "d2-d4")
         // we also need the move index (e.g. "3-3") so that the user can play the move by clicking the arrow's text
-        let a, b
-        [a, b] = move.split("-")
-        const leftward = a[0] > b[0] // we should reverse left-pointing arrow so that its text is not upside down
-        // find the two square objects in the DOM
-        let startSq = document.querySelector(`#board${boardnum} [data-square="${a}"]`)
-        let endSq = document.querySelector(`#board${boardnum} [data-square="${b}"]`)
-        // if the squares exist, create a leaderline (arrow) and store it in the leaderlines array (so that we can delete it later)
-        if (startSq !== null && endSq !== null) {
-          startOrEndLabel = leftward ? "startLabel" : "endLabel"
-          let ll = new LeaderLine(
-          LeaderLine.pointAnchor(leftward ? endSq : startSq),
-          LeaderLine.pointAnchor(leftward ? startSq : endSq),
-          {
-            path: 'straight',
-            color: `${drawPlain ? 'rgba(212,36,67,0.5)' : 'rgba(94,198,85,0.5)'}`,
-            size: 5.6*(endSq.offsetWidth)/83, // size of a square is at most 83 - make arrow size proportional
-            startPlug: leftward ? 'arrow1' : 'behind', // reverse startplug and endplug for left arrows
-            endPlug: leftward ? 'behind' : 'arrow1',  // reverse startplug and endplug for leftward arrows
-          })
-          // reverse the placement of the arrow text for leftward arrows
-          ll[startOrEndLabel] = LeaderLine.pathLabel(`${drawPlain ? 'MAIN' : 'VAR.'}`, {
-              // lineOffset: leftward ? 4 : -4, // add offset (from the default location)
-              color: `${drawPlain ? 'rgb(212,36,67)' : 'green'}`, // font color
-              outlineColor: "#fff",
-              fontSize: `${20*(endSq.offsetWidth)/83}px`,
-              fontWeight: "bold",
+        if (move) {
+          let a, b
+          [a, b] = move.split("-")
+          const leftward = a[0] > b[0] // we should reverse left-pointing arrow so that its text is not upside down
+          // find the two square objects in the DOM
+          let startSq = document.querySelector(`#board${boardnum} [data-square="${a}"]`)
+          let endSq = document.querySelector(`#board${boardnum} [data-square="${b}"]`)
+          // if the squares exist, create a leaderline (arrow) and store it in the leaderlines array (so that we can delete it later)
+          if (startSq !== null && endSq !== null) {
+            startOrEndLabel = leftward ? "startLabel" : "endLabel"
+            let ll = new LeaderLine(
+            LeaderLine.pointAnchor(leftward ? endSq : startSq),
+            LeaderLine.pointAnchor(leftward ? startSq : endSq),
+            {
+              path: 'straight',
+              color: `${drawPlain ? 'rgba(212,36,67,0.5)' : 'rgba(94,198,85,0.5)'}`,
+              size: 5.6*(endSq.offsetWidth)/83, // size of a square is at most 83 - make arrow size proportional
+              startPlug: leftward ? 'arrow1' : 'behind', // reverse startplug and endplug for left arrows
+              endPlug: leftward ? 'behind' : 'arrow1',  // reverse startplug and endplug for leftward arrows
             })
-          leaderlines[boardnum].push(ll);
-        }
-        let leaderline = document.querySelector(".leader-line:last-of-type")
-        // console.log(document.querySelector(".leader-line:last-of-type"))
-        if (leaderline) {
-          // leaderline.style.zIndex = 'auto'
-          leaderlineText = leaderline.querySelector("text")
-          // leaderlineText.style.zIndex = 1000
-          leaderlineText.addEventListener("click", function(evt) {
-            // evt.preventDefault() //necessary?
-            // evt.stopPropagation() //necessary?
-            cursors[boardnum] = moveIdx // update the cursor first before playing move
-            playmove(boardnum, moveIdx, true)
-            removeArrows(boardnum)
-          }, false);
+            // reverse the placement of the arrow text for leftward arrows
+            ll[startOrEndLabel] = LeaderLine.pathLabel(`${drawPlain ? 'MAIN' : 'VAR.'}`, {
+                // lineOffset: leftward ? 4 : -4, // add offset (from the default location)
+                color: `${drawPlain ? 'rgb(212,36,67)' : 'green'}`, // font color
+                outlineColor: "#fff",
+                fontSize: `${20*(endSq.offsetWidth)/83}px`,
+                fontWeight: "bold",
+              })
+            leaderlines[boardnum].push(ll);
+          }
+          let leaderline = document.querySelector(".leader-line:last-of-type")
+          // console.log(document.querySelector(".leader-line:last-of-type"))
+          if (leaderline) {
+            // leaderline.style.zIndex = 'auto'
+            leaderlineText = leaderline.querySelector("text")
+            // leaderlineText.style.zIndex = 1000
+            leaderlineText.addEventListener("click", function(evt) {
+              // evt.preventDefault() //necessary?
+              // evt.stopPropagation() //necessary?
+              removeArrows(boardnum) // remove any previously drawn arrows
+              cursors[boardnum] = moveIdx // update the cursor first before playing move
+              playmove(boardnum, moveIdx, true) // play move (draw any new arrows)
+            }, false);
+          }
         }
       }
 

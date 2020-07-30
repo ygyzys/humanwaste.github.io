@@ -26,7 +26,7 @@ var boardThemes = { // light square color, dark square color
   "newspaper":           ['#d2d2c8','#b0a89e'],
   "pepecorona":          ['#e7e2e2','#585a5e'], // dark = #5e6064?
   "merida":              ['#c5d4c9','#698771'],
-  "jinalpha":            ['#ada9aa','#59523f'],
+  "jinalpha":            ['#d4dbd3','#546b5d'],
   "maya":                ['#bebecd','#606371'],
   "ericson":             ['#e4c8a6','#805730'],
   "vvvvvvchess":         ['#e1d8e5','#211223'],

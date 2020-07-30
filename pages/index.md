@@ -7,7 +7,8 @@ description:
 
 <div style="text-align: left;">You can navigate the boards with your arrow keys <img src="images/arrowkeys.jpg" style="height: 1em;" alt="left and right arrow keys">. Also, if a position on the board has multiple variations, there should be indications on the board that are clickable.</div>
 
-~ means page in progress (not broken link)
+<br/>
+<strong>~ means page in progress (not broken link!)</strong>
 
 <div class="page-list">
 1. e3
@@ -25,7 +26,7 @@ description:
 1. d4
   <ul>
     <li><a href="/1-d4-Na6">1. d4 <span class="figurine">N</span>a6</a> ~</li>
-    <li><a href="/1-d4-Nf6">1. d4 <span class="figurine">N</span>f6</a></li>
+    <li><a href="/1-d4-Nf6">1. d4 <span class="figurine">N</span>f6</a> ~</li>
     <li><a href="/1-d4-Nh6">1. d4 <span class="figurine">N</span>h6</a> ~</li>
     <li><a href="/1-d4-e6">1. d4 e6</a></li>
     <li><a href="/1-d4-e5">1. d4 e5</a></li>
@@ -115,3 +116,5 @@ description:
   <ul>
   </ul>
 </div>
+
+(sources for the themes are listed on [this page](/sources))
