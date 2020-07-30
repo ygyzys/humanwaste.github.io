@@ -115,6 +115,13 @@ description:
   1. h4
   <ul>
   </ul>
+  Theoretical Endgames
+  <ul>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
 </div>
 
 (sources for the themes are listed on [this page](/sources))
