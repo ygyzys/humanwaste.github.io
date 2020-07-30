@@ -80,16 +80,17 @@
       boards.forEach((board) => {
         board.resize()
       })
-      // we must redraw arrows
-      deleteArrows(0);
-      drawArrow(0, "a8-c8", "14-0");
-      drawArrowPlain(0, "a7-a6", "14");
+      // we must redraw all arrows
+      for(let boardnum = 0; boardnum < numOfBoards; boardnum++) {
+        removeArrows(boardnum)
+        drawArrows(boardnum, cursors[boardnum])
+      }
     }, false)
 
     function changeTheme(theme) {
       boards.forEach((board, boardnum) => {
         let currentFen = findfen(boardnum, cursors[boardnum])
-        deleteArrows(boardnum)
+        removeArrows(boardnum)
         boards[boardnum].destroy()
         let newBoard = ChessBoard(`board${boardnum}`, {
           pieceTheme: window["pieceThemes"][theme],
@@ -99,10 +100,11 @@
           draggable: false,
           showNotation: false,
         })
-        // we must redraw arrows
-        deleteArrows(0);
-        drawArrow(0, "a8-c8", "14-0");
-        drawArrowPlain(0, "a7-a6", "14");
+        // we must redraw all arrows
+        for(let i = 0; i < numOfBoards; i++) {
+          removeArrows(i)
+          drawArrows(i, cursors[i])
+        }
         boards[boardnum] = newBoard
       })
     }
@@ -133,17 +135,10 @@
       }
 
       // delete previously drawn arrows whenever a move is played
-      deleteArrows(boardnum);
+      removeArrows(boardnum);
 
-      // annotate the board with any immediately upcoming variations (add new arrows if necessary)
-      if (boardnum == 0) {
-        switch (cursor) {
-          case "10": drawArrow(0, "a8-c8", "11-0"); drawArrowPlain(0, "a7-a6", "11"); break; // on move 13 of the mainline there is an alternative 14th move
-          case "11-1": drawArrow(0, "a7-a5", "11-2-0"); drawArrowPlain(0, "e7-e5", "11-2"); break; // on move 1 of the variation in the 14th move of the main line, there is an alternative 2nd move
-          case "22": drawArrow(0, "g8-h6", "23-0"); drawArrowPlain(0, "g7-g6", "23"); break;
-          default: 
-        }
-      }
+      // annotate the board with new arrows indicating any immediate variations
+      drawArrows(boardnum, cursors[boardnum])
     }
 
     // set up each board
@@ -333,14 +328,27 @@
             // evt.stopPropagation() //necessary?
             cursors[boardnum] = moveIdx // update the cursor first before playing move
             playmove(boardnum, moveIdx, true)
-            deleteArrows(boardnum)
+            removeArrows(boardnum)
           }, false);
         }
       }
 
-      function deleteArrows(boardnum) {
+      function removeArrows(boardnum) {
         leaderlines[boardnum].forEach(ll => ll.remove())
         leaderlines[boardnum] = []
+      }
+
+      function drawArrows(boardnum, cursor) {
+        if (arrows[boardnum].hasOwnProperty(cursor)) {
+          arrows[boardnum][cursor].forEach((elt, i) => {
+            if (i == 0) {
+              drawArrowPlain(boardnum, elt[0], elt[1])
+            }
+            else {
+              drawArrow(boardnum, elt[0], elt[1])
+            }
+          })
+        }
       }
       
       // add click listener to themebuttons

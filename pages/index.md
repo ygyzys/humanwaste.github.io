@@ -5,7 +5,7 @@ title:
 description: 
 ---
 
-<div style="text-align: left;">You can navigate the boards with your arrow keys <img src="images/arrowkeys.jpg" style="height: 1em;" alt="left and right arrow keys">. Also, if a position on the board has one or more immediate variations, there should be visual indicators on the board that are clickable.</div>
+<div style="text-align: left;">You can navigate the boards with your arrow keys <img src="images/arrowkeys.jpg" style="height: 1em;" alt="left and right arrow keys">. Also, if a position on the board has multiple variations, there should be indications on the board that are clickable.</div>
 
 ~ means page in progress (not broken link)
 
@@ -74,7 +74,7 @@ description:
     <li><a href="/1Na3Nf6">1. <span class="figurine">N</span>a3 <span class="figurine">N</span>f6</a></li>
     <li><a href="/1Na3Nh6">1. <span class="figurine">N</span>a3 <span class="figurine">N</span>h6</a></li>
   </ul>
-  
+
   1. d3
   <ul>
   </ul>
