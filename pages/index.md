@@ -5,7 +5,7 @@ title:
 description: 
 ---
 
-<div style="border: 2px groove black; padding: 0.7em; background: #fafaf3; position: inline-block; margin: 0 auto; width: 500px;">
+<div style="border: 2px groove black; padding: 0.7em; background: #fafaf3; position: inline-block; margin: 0 auto; width: 500px; max-width: 94%">
   <div style="text-align: left;">
     <div>You can navigate all the boards with your arrow keys <img src="images/arrowkeys.jpg" style="height: 1em;" alt="left and right arrow keys">.</div>
     <div>Also, if a position has multiple variations, there should be indications on the board that you can click.</div>
@@ -20,7 +20,11 @@ description:
 <div class="page-list">
 1. e3
   <ul>
-    <li><a href="/1-e3-e6">1. e3 e6</a></li>
+    <li><a href="/1-e3-e6-2-Qh5-g6">1. e3 e6 2. <span class="figurine">Q</span>h5 g6</a></li>
+    <li><a href="/1-e3-e6-2-Qf3">1. e3 e6 2. <span class="figurine">Q</span>f3</a></li>
+    <li><a href="/1-e3-e6-2-Qg4">1. e3 e6 2. <span class="figurine">Q</span>g4</a></li>
+    <li><a href="/1-e3-e6-2-Nf3">1. e3 e6 2. <span class="figurine">N</span>f3</a></li>
+    <li><a href="/1-e3-e6-2-Nc3">1. e3 e6 2. <span class="figurine">N</span>c3</a></li>
     <li><a href="/1-e3-e5">1. e3 e5</a></li>
     <li><a href="/1-e3-Nf6">1. e3 <span class="figurine">N</span>f6</a></li>
   </ul>
@@ -51,7 +55,8 @@ description:
     <li><a href="/1-Nf3-f6-2-Nd4-Nh6-3-g4">1. <span class="figurine">N</span>f3 f6 2. <span class="figurine">N</span>d4 <span class="figurine">N</span>h6 3. g4</a></li>
     <li><a href="/1-Nf3-f6-2-Na3">1. <span class="figurine">N</span>f3 f6 2. <span class="figurine">N</span>a3</a></li>
     <li><a href="/1-Nf3-f6-2-e3">1. <span class="figurine">N</span>f3 f6 2. e3</a></li>
-    <li><a href="/1-Nf3-f6-2-e4">1. <span class="figurine">N</span>f3 f6 2. e4</a></li>
+    <li><a href="/1-Nf3-f6-2-e4-d5">1. <span class="figurine">N</span>f3 f6 2. e4 d5</a> ~</li>
+    <li><a href="/1-Nf3-f6-2-e4-e6">1. <span class="figurine">N</span>f3 f6 2. e4 e6</a></li>
     <li><a href="/1-Nf3-f6-2-d4">1. <span class="figurine">N</span>f3 f6 2. d4</a></li>
     <li><a href="/1-Nf3-f6-2-c3">1. <span class="figurine">N</span>f3 f6 2. c3</a></li>
   </ul>

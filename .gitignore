@@ -2,6 +2,4 @@ _site
 Rakefile
 Gemfile
 Gemfile.lock
-test.js
-chess.js
 tmp
