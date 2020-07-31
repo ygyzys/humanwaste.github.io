@@ -26,11 +26,11 @@ var boardThemes = { // light square color, dark square color
   "newspaper":           ['#d2d2c8','#b0a89e'],
   "pepecorona":          ['#e7e2e2','#585a5e'], // dark = #5e6064?
   "merida":              ['#c5d4c9','#698771'],
-  "jinalpha":            ['#d4dbd3','#546b5d'],
-  "maya":                ['#bebecd','#606371'],
-  "ericson":             ['#e4c8a6','#805730'],
+  "jinalpha":            ['#c5d4c9','#698771'],
+  "maya":                ['#c5d4c9','#698771'],
+  "ericson":             ['#c5d4c9','#698771'],
   "vvvvvvchess":         ['#e1d8e5','#211223'],
-  "pirat":               ['#c8cbbc','#6b5753'],
+  "pirat":               ['#c5d4c9','#698771'],
   "bookengraved":        ['white', 'repeating-linear-gradient(135deg, black 2.25%, black 4.5%, white 4.5%, white 6.75%)'],
   "bookgoodcompanions":  ['white', 'repeating-linear-gradient(135deg, black 2.25%, black 4.5%, white 4.5%, white 6.75%)'],
 }
