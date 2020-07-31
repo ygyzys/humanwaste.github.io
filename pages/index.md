@@ -117,7 +117,7 @@ description:
   </ul>
   Theoretical Endgames
   <ul>
-    <li></li>
+    <li><a href="/one-king">One King</a></li>
     <li></li>
     <li></li>
     <li></li>

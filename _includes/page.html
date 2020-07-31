@@ -341,7 +341,7 @@
       }
 
       function drawArrows(boardnum, cursor) {
-        if (arrows[boardnum].hasOwnProperty(cursor)) {
+        if (arrows[boardnum] && arrows[boardnum].hasOwnProperty(cursor)) {
           arrows[boardnum][cursor].forEach((elt, i) => {
             if (i == 0) {
               drawArrowPlain(boardnum, elt[0], elt[1])

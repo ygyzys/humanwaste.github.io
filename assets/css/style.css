@@ -8,6 +8,10 @@
  * Date: $date$
  */
 
+.comment {
+  padding: 0 0 0.6em 0;
+}
+
 .page-list {
   display:inline-block;
   text-align: left;
@@ -45,9 +49,9 @@ body {
   text-align: center;
 }
 
-/* .navbar-dark .navbar-toggler {
+.navbar-dark .navbar-toggler {
   background-color: inherit;
-} */
+}
 
 .navbar-brand {
   font-family: 'Constantia', 'Georgia', 'Liberation Serif', serif;
@@ -128,24 +132,24 @@ svg.leader-line > text {
   -webkit-user-select: none; /* Safari 3.1+ */
   -moz-user-select: none; /* Firefox 2+ */
   -ms-user-select: none; /* IE 10+ */
-  padding: 0 4%;
+  padding: 0 2%;
   display: flex;
 }
 
 .back, .backback, .forward, .forwardforward {
-  /* order: 1; */
   display: inline-block;
-  position: relative;
-  color:rgb(60, 60, 70);
-  font-size: 19px;
-  padding: 0.8vh 3vw;
+  padding: 0.8vh;
+  margin: 0.34em 0.1em 0.6em;
   flex-grow: 1; /* make buttons grow (proportionately) to fill size of container */
-  margin: 0.2em 0.05em 0.6em;
-  border: 0.17em solid #bcbccb;
+  position: relative;
+  font-size: 1.3em;
+  border: none;
   /* box-sizing: border-box; */
-  /* text-decoration:none; */
-  background:rgb(208, 208, 208);
-  text-align:center;
+  text-decoration: none;
+  background: #d0d0d0;
+  transition: none;
+  border: 0.17em solid #bcbcca;
+  text-align: center;
 }
 
 .back:active, .forward:active, .backback:active, .forwardforward:active {
@@ -153,25 +157,6 @@ svg.leader-line > text {
   color: rgb(28, 122, 199);
 }
 
-.back:active {
-  box-shadow: 3px 2px #555;
-  transform: translateX(-3px);
-}
-
-.forward:active {
-  box-shadow: -3px 2px #555;
-  transform: translateX(3px);
-}
-
-.backback:active {
-  box-shadow: 6px 4px #555;
-  transform: translateX(-6px);
-}
-
-.forwardforward:active {
-  box-shadow: -6px 4px #555;
-  transform: translateX(6px);
-}
 /* @media all and (max-width:30em) {
   .back, .forward, .backback, .forwardforward {
     display: inline-block;
@@ -223,7 +208,7 @@ svg.leader-line > text {
 .gamecontainer {
   position: relative;
   margin: 0.7em 0;
-  outline: 3px solid pink;
+  outline: none;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -232,6 +217,7 @@ svg.leader-line > text {
 }
 
 .gamecontainer.selected {
+  outline: 3px solid pink;
   background:rgb(241, 245, 247);
 }
 
